@@ -1,0 +1,30 @@
+# Details of a user
+---
+name: The Goose Game
+board:
+  step-count: 63
+  steps:
+    0: Start
+    6: Bridge
+    5: Goose
+    9: Goose
+    14: Goose
+    18: Goose
+    23: Goose
+    27: Goose
+    63: Finish
+dices:
+  - min: 1
+    max: 6
+  - min: 1
+    max: 6
+players:
+  - Alex
+  - Sandra
+  - Maria
+  - John
+  - Michael
+  - Ewan
+  - Laura
+  - Jose
+  - Phil
