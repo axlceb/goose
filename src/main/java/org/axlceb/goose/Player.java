@@ -1,12 +1,16 @@
 package org.axlceb.goose;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Player {
+
     private final String name;
+    @EqualsAndHashCode.Exclude
     private Integer step = 0;
 
     public Player(String name) {

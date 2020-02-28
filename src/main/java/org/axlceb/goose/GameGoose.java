@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 @Slf4j
 @Getter
@@ -29,21 +29,22 @@ public class GameGoose implements Game {
             var continueGame = true;
             do {
                 System.out.print("?: ");
-                String text = scanner.nextLine();
+                String text = scanner.nextLine();                                                                        // read user input
+                var argument = Arrays.stream(text.split(" ", 2)).skip(1).findFirst().orElse("");        // get command argument
 
                 switch (Commands.fromString(text)) {
                     case ADD:
-                        addPlayer(text.split(" ", 2)[1]);
+                        addPlayer(argument);
                         break;
                     case MOVE:
-                        System.out.println(text.split(" ", 2)[1]);
+                        movePlayer(argument);
                         break;
                     case EXIT:
-                        System.out.println("exit");
+                        performExit();
                         continueGame = false;
                         break;
                     default:
-                        System.out.println("Illegal command");
+                        System.out.println("Illegal command. Please try it again");
                 }
             } while (continueGame);
 
@@ -54,9 +55,19 @@ public class GameGoose implements Game {
     }
 
     public void addPlayer(String name) {
-        players.add(Player.create(name));
+        var newPlayer = Player.create(name);
+
+        if (players.contains(newPlayer)) {
+            System.out.println("Sorry the player with the name " + name + " is already in the game. Please try it again");
+        } else {
+            players.add(newPlayer);
+            System.out.println("The player " + name + " is entering the game!");
+        }
     }
 
     public void movePlayer(String name) {}
 
+    private void performExit() {
+        System.out.println("Cleaning the data and prepare to Exit");
+    }
 }
