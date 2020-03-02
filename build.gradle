@@ -21,9 +21,9 @@ repositories {
 }
 
 dependencies {
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.3.0"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.2.3"
-    compile "org.apache.commons:commons-lang3:3.4"
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.3.0'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.2.3'
+    compile 'org.apache.commons:commons-lang3:3.4'
     
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
@@ -35,7 +35,7 @@ dependencies {
     testCompile 'org.mockito:mockito-core:2.23.4'
 }
 
-group = 'org.axlceb'
+group = 'org.axlceb.goose'
 version = '1.0-SNAPSHOT'
 description = 'goose'
 sourceCompatibility = '11'
@@ -46,6 +46,14 @@ publishing {
         maven(MavenPublication) {
             from(components.java)
         }
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'org.axlceb.goose.App'
+        )
     }
 }
 

@@ -17,6 +17,7 @@ public class App {
 
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
+            // Load game config from file
             Game game = mapper.readValue(new File((new App().getClass().getClassLoader()).getResource("goose.yml").getFile()), GameGoose.class);
             game.run();
         } catch (JsonParseException e) {

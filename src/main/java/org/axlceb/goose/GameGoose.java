@@ -28,7 +28,7 @@ public class GameGoose implements Game {
         try (Scanner scanner = new Scanner(System.in)) {
             var continueGame = true;
             do {
-                System.out.print("?: ");
+                System.out.println("?: ");
                 String text = scanner.nextLine();                                                                        // read user input
                 var argument = Arrays.stream(text.split(" ", 2)).skip(1).findFirst().orElse("");        // get command argument
 
@@ -65,7 +65,23 @@ public class GameGoose implements Game {
         }
     }
 
-    public void movePlayer(String name) {}
+    public void movePlayer(String name) {
+
+        var newPlayer = Player.create(name);
+
+        if (players.contains(newPlayer)) {
+            players.stream()
+                    .filter(p -> p.getName().equals(name))
+                    .findAny()
+                    .ifPresent(
+                            (p) -> p.move(dices.stream()
+                                    .mapToInt(d -> d.roll())
+                                    .sum())
+                    );
+        } else {
+            System.out.println("Sorry the player with the name " + name + " is not in the game. Please try it again");
+        }
+    }
 
     private void performExit() {
         System.out.println("Cleaning the data and prepare to Exit");
