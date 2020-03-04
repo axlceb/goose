@@ -26,5 +26,6 @@ out/
 
 ### Gradle ###
 .gradle
+.gradle/
 gradle/
 build/

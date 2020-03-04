@@ -22,10 +22,13 @@ public class Player {
     }
 
     public void move(Integer steps) {
-        System.out.print("The player " + name + " have moved from " + step);
+        System.out.print(" the player " + this.name + " move from " + this.step);
         this.step += steps;
-        System.out.print(" to " + step);
-        System.out.println("  ");
+        System.out.println(" to " + this.step);
+    }
 
+    @Override
+    public String toString() {
+        return this.name + ':' + this.step;
     }
 }

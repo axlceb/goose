@@ -17,6 +17,8 @@ public class Dice {
     private Integer max;
 
     public Integer roll() {
-        return random.nextInt((max - min) + 1) + min;
+        var result = random.nextInt((max - min) + 1) + min;
+        System.out.print(" dice rolls " + result);
+        return result;
     }
 }

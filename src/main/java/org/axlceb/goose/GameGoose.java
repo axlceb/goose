@@ -1,9 +1,6 @@
 package org.axlceb.goose;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -23,7 +20,7 @@ public class GameGoose implements Game {
     private List<Player> players;
 
     public void run() {
-        System.out.println(name + " - Start!");
+        System.out.println(this.name + " - Start!");
 
         try (Scanner scanner = new Scanner(System.in)) {
             var continueGame = true;
@@ -33,6 +30,9 @@ public class GameGoose implements Game {
                 var argument = Arrays.stream(text.split(" ", 2)).skip(1).findFirst().orElse("");        // get command argument
 
                 switch (Commands.fromString(text)) {
+                    case INFO:
+                        System.out.println(this.toString());
+                        break;
                     case ADD:
                         addPlayer(argument);
                         break;
@@ -44,14 +44,14 @@ public class GameGoose implements Game {
                         continueGame = false;
                         break;
                     default:
-                        System.out.println("Illegal command. Please try it again");
+                        System.out.println("Sorry. It is not a recognized command. Please try it again");
                 }
             } while (continueGame);
 
         } catch (RuntimeException e) {
             log.error("Scanner initialization fails", e);
         }
-        System.out.println(name + " - Ends!");
+        System.out.println(this.name + " - Ends!");
     }
 
     public void addPlayer(String name) {
@@ -78,12 +78,36 @@ public class GameGoose implements Game {
                                     .mapToInt(d -> d.roll())
                                     .sum())
                     );
+
+            // System.out.println(this.board.getSteps().get());
+
+            // TODO: Get player fom name and check the space
+
         } else {
             System.out.println("Sorry the player with the name " + name + " is not in the game. Please try it again");
         }
+
+
     }
 
-    private void performExit() {
-        System.out.println("Cleaning the data and prepare to Exit");
+    public void performExit() {
+        System.out.println("Cleaning the data and prepare to exit " + this.name);
+    }
+
+    @Override
+    public String toString() {
+        // NOTE: This is just an example of using stringBuffer to work faster with String.
+        // But in this case it is more code clean and surely faster a simple concatenation of Strings
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder
+                .append("GameGoose {\n")
+                .append("    name = '" + name + "\' \n")
+                .append("    step-count = " + board.getStepCount() + " \n")
+                .append("    dices = " + dices.size() + " \n")
+                .append("    players = " + players + " \n")
+                .append("}");
+        return stringBuilder.toString();
     }
 }
