@@ -1,9 +1,7 @@
 package org.axlceb.goose;
 
-import org.axlceb.goose.exception.PlayerAlreadyExistsException;
 import org.axlceb.goose.exception.PlayerNotFoundException;
-import org.axlceb.goose.exception.CommandNotFoundException;
-import org.axlceb.goose.exception.GameStoppedException;
+import org.axlceb.goose.shared.Dice;
 
 import java.io.PrintStream;
 import java.util.Arrays;
@@ -24,20 +22,6 @@ public class CommandExecutor {
     }
 
     public void executeGameCommand(String userString) throws Exception {
-        Command command = Command.getCommandFromString(userString);
-        List<String> userArguments = command.getCommandArguments(userString);
-        switch (command) {
-            case ADD_PLAYER:
-                handleAddPlayer(userArguments);
-                break;
-            case MOVE_PLAYER:
-                handleMovePlayer(userArguments);
-                break;
-            case EXIT:
-                throw new GameStoppedException();
-            default:
-                throw new CommandNotFoundException(userString);
-        }
     }
 
     private void handleMovePlayer(List<String> userArguments) throws PlayerNotFoundException {
@@ -53,13 +37,6 @@ public class CommandExecutor {
         gooseGame2.movePlayer(playerName, rolls);
     }
 
-    private void handleAddPlayer(List<String> userArguments) throws PlayerAlreadyExistsException {
-        String playerName = userArguments.get(0);
-
-        gooseGame2.addPlayer(playerName);
-
-        printStream.print(gooseGame2.getPlayers().keySet()
-                .stream()
-                .collect(Collectors.joining(", ", "players: ", "")));
+    private void handleAddPlayer(List<String> userArguments) {
     }
 }

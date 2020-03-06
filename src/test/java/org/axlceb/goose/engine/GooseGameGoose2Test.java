@@ -1,9 +1,7 @@
 package org.axlceb.goose.engine;
 
-import org.axlceb.goose.GameListener;
 import org.axlceb.goose.GooseGame2;
 import org.axlceb.goose.board.Board2;
-import org.axlceb.goose.exception.PlayerAlreadyExistsException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

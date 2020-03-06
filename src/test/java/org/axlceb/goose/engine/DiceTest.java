@@ -1,6 +1,6 @@
 package org.axlceb.goose.engine;
 
-import org.axlceb.goose.Dice;
+import org.axlceb.goose.shared.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
