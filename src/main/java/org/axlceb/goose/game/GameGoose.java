@@ -36,7 +36,7 @@ public class GameGoose implements Game {
             do {
                 System.out.println("?: ");
                 String text = scanner.nextLine();                                                                        // read user input
-                var argument = Arrays.stream(text.split(" ", 2)).skip(1).findFirst().orElse("");        // get command argument. Null check avoid
+                var argument = Arrays.stream(text.split(" ", 2)).skip(1).findFirst().orElse("");        // get command argument. Null check param avoid
 
                 switch (Commands.fromString(text)) {
                     case INFO:
@@ -66,6 +66,7 @@ public class GameGoose implements Game {
         if (getPlayerByName(name) == null) {
             players.add(Player.create(name));
             System.out.println("The player " + name + " is entering the game!");
+            System.out.println(name + " is on " + Space.START.name());
         } else {
             System.out.println("Sorry the player with the name " + name + " is already in the game. Please try it again");
         }
@@ -81,7 +82,7 @@ public class GameGoose implements Game {
                         .findAny()
                         .ifPresent(
                                 (p) -> p.move(dices.stream()
-                                        .mapToInt(d -> d.roll())
+                                        .mapToInt(Dice::roll)
                                         .sum())
                         );
 
@@ -109,24 +110,29 @@ public class GameGoose implements Game {
 
     private void handleSteps(Player player) {
 
-        Space space = Space.fromString(board.getSteps().get(player.getStep()));         // Get the Space of the player
+        Space space = Space.fromString(board.getSteps().get(player.getStep()));                                 // Get the Space of the player
 
         switch (space) {
             case START:
-                System.out.println("Player " + player.getName() + " is on " + Space.START.name());
+                System.out.println(player.getName() + " is on " + Space.START.name());
                 break;
             case BRIDGE:
-                System.out.println("Player " + player.getName() + " step on " + Space.BRIDGE.name());
+                System.out.println(player.getName() + " step on " + Space.BRIDGE.name());
                 player.setStep(12);
-                System.out.println("Player " + player.getName() + " move to step " + player.getStep());
+                System.out.println(player.getName() + " move to step " + player.getStep());
                 break;
             case GOOSE:
-                System.out.println("Player " + player.getName() + " step on " + Space.GOOSE.name());
-                System.out.println("Player " + player.getName() + " move to " + player.getStep());
+                System.out.println(player.getName() + " step on " + Space.GOOSE.name());
+                System.out.print(player.getName() + " move from " + player.getStep());
+                player.setStep(player.getStep() + dices.stream()                                                // Advance the same amount of steps
+                        .mapToInt(Dice::getResult)
+                        .sum());
+                System.out.println(" to " + player.getStep());
+                this.handleSteps(player);                                                                       // Handle next Step
                 break;
             case FINISH:
-                System.out.println("Player " + player.getName() + " reach the step " + player.getStep());
-                System.out.println("Player " + player.getName() + " WINS!");
+                System.out.println(player.getName() + " reach the step " + player.getStep());
+                System.out.println(player.getName() + " WINS!");
                 performExit();
                 break;
             default:
@@ -142,10 +148,10 @@ public class GameGoose implements Game {
 
         stringBuilder
                 .append("GameGoose {\n")
-                .append("    name = '" + name + "\' \n")
-                .append("    step-count = " + board.getStepCount() + " \n")
-                .append("    dices = " + dices.size() + " \n")
-                .append("    players = " + players + " \n")
+                .append("    name = '").append(name).append("\' \n")
+                .append("    step-count = ").append(board.getStepCount()).append(" \n")
+                .append("    dices = ").append(dices.size()).append(" \n")
+                .append("    players = ").append(players).append(" \n")
                 .append("}");
         return stringBuilder.toString();
     }

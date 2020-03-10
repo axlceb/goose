@@ -13,7 +13,7 @@ public class Player {
     @EqualsAndHashCode.Exclude
     private Integer step = 0;
 
-    public Player(String name) {
+    private Player(String name) {
         this.name = name;
     }
 
@@ -22,7 +22,7 @@ public class Player {
     }
 
     public void move(Integer steps) {
-        System.out.print(" the player " + this.name + " move from " + this.step);
+        System.out.print("the player " + this.name + " move from " + this.step);
         this.step += steps;
         System.out.println(" to " + this.step);
     }

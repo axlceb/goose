@@ -16,9 +16,12 @@ public class Dice {
     private Integer min;
     private Integer max;
 
+    @Setter(AccessLevel.NONE)
+    private Integer result;
+
     public Integer roll() {
-        var result = random.nextInt((max - min) + 1) + min;
-        System.out.print(" dice rolls " + result);
-        return result;
+        this.result = random.nextInt((max - min) + 1) + min;
+        System.out.print("Dice rolls " + this.result + ", ");
+        return this.result;
     }
 }
