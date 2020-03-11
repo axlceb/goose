@@ -1,6 +1,5 @@
 package org.axlceb.goose.engine;
 
-import org.axlceb.goose.GooseGame2;
 import org.axlceb.goose.board.Board2;
 import org.junit.Before;
 import org.junit.Rule;

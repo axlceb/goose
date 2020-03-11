@@ -13,6 +13,10 @@ public class Player {
     @EqualsAndHashCode.Exclude
     private Integer step = 0;
 
+    /**
+     * Not required just an example how to change the access modifier in constructor and use the Factory pattern. Player Interface is recommended
+     * @param name name not null value is manage by the code orElse @NotNull annotation can be used
+     */
     private Player(String name) {
         this.name = name;
     }

@@ -15,6 +15,11 @@ public enum Space {
             this.text = text;
         }
 
+    /**
+     * Parse the text from the resources yml game config file to proper enum Space. OrElse the default value
+     * @param text text from yml file
+     * @return Space enum
+     */
     public static Space fromString(String text) {
         return Arrays.stream(Space.values()).filter(c -> c.text.equalsIgnoreCase(text))
                 .findFirst()

@@ -29,18 +29,18 @@ public class GameGoose implements Game {
     private boolean onGoing = false;
 
     public void run() {
-        System.out.println(this.name + " - Start!");
+        this.printToConsole(this.name, " - Start!");
 
         try (Scanner scanner = new Scanner(System.in)) {
             this.onGoing = true;
             do {
-                System.out.println("?: ");
+                this.printToConsole("?: ");
                 String text = scanner.nextLine();                                                                        // read user input
                 var argument = Arrays.stream(text.split(" ", 2)).skip(1).findFirst().orElse("");        // get command argument. Null check param avoid
 
                 switch (Commands.fromString(text)) {
                     case INFO:
-                        System.out.println(this.toString());
+                        this.printToConsole(this.toString());
                         break;
                     case ADD:
                         addPlayer(argument);
@@ -52,29 +52,29 @@ public class GameGoose implements Game {
                         performExit();
                         break;
                     default:
-                        System.out.println("Sorry. It is not a recognized command. Please try it again");
+                        this.printToConsole("Sorry. It is not a recognized command. Please try it again");
                 }
             } while (this.onGoing);
 
         } catch (RuntimeException e) {
             log.error("Scanner initialization fails", e);
         }
-        System.out.println(this.name + " - Ends!");
+        this.printToConsole(this.name, " - Ends!");
     }
 
     public void addPlayer(String name) {
-        if (getPlayerByName(name) == null) {
+        if (this.getPlayerByName(name) == null) {
             players.add(Player.create(name));
-            System.out.println("The player " + name + " is entering the game!");
-            System.out.println(name + " is on " + Space.START.name());
+            this.printToConsole("The player ", name, " is entering the game!");
+            this.printToConsole(name, " is on ", Space.START.name());
         } else {
-            System.out.println("Sorry the player with the name " + name + " is already in the game. Please try it again");
+            this.printToConsole("Sorry the player with the name ", name, " is already in the game. Please try it again");
         }
     }
 
     public void movePlayer(String name) {
-
         var player = getPlayerByName(name);
+        
         try {
             if (getPlayerByName(name) != null) {
                 players.stream()
@@ -88,7 +88,8 @@ public class GameGoose implements Game {
 
                 handleSteps(player);
             } else {
-                System.out.println("Sorry the player with the name " + name + " is not in the game. Please try it again");
+                // NOTE: This is just an example of using custom Exception. Not required in the game.
+                this.printToConsole("Sorry the player with the name ", name, " is not in the game. Please try it again");
                 throw new PlayerNotFoundException(name);
             }
         } catch (RuntimeException e) {
@@ -98,7 +99,37 @@ public class GameGoose implements Game {
 
     public void performExit() {
         this.onGoing = false;
-        System.out.println("Cleaning the data and prepare to exit " + this.name);
+        this.printToConsole("Cleaning the data and prepare to exit ", this.name);
+    }
+
+    private void handleSteps(Player player) {
+        Space space = Space.fromString(board.getSteps().get(player.getStep()));                                 // Get the Space of the player
+
+        switch (space) {
+            case START:
+                this.printToConsole(player.getName(), " is on ", Space.START.name());
+                break;
+            case BRIDGE:
+                this.printToConsole(false, player.getName(), " step on ", Space.BRIDGE.name());
+                player.setStep(12);
+                this.printToConsole(player.getName(), " move to step ", player.getStep().toString());
+                break;
+            case GOOSE:
+                this.printToConsole(false, player.getName(), " step on ", Space.GOOSE.name(), " ");
+                this.printToConsole(false, player.getName(), " move from ", player.getStep().toString(), " ");
+                player.setStep(player.getStep() + dices.stream()                                                // Advance the same amount of steps
+                        .mapToInt(Dice::getResult)
+                        .sum());
+                this.printToConsole(" to ", player.getStep().toString());
+                this.handleSteps(player);                                                                       // Handle next Step
+                break;
+            case FINISH:
+                this.printToConsole(false, player.getName(), " reach the step ", player.getStep().toString());
+                this.printToConsole(player.getName(), " WINS!");
+                performExit();
+                break;
+            default:
+        }
     }
 
     private Player getPlayerByName(String name) {
@@ -108,35 +139,20 @@ public class GameGoose implements Game {
                 .orElse(null);
     }
 
-    private void handleSteps(Player player) {
+    private void printToConsole(String... text) {
+        System.out.println(String.join("", text));
+    }
 
-        Space space = Space.fromString(board.getSteps().get(player.getStep()));                                 // Get the Space of the player
-
-        switch (space) {
-            case START:
-                System.out.println(player.getName() + " is on " + Space.START.name());
-                break;
-            case BRIDGE:
-                System.out.println(player.getName() + " step on " + Space.BRIDGE.name());
-                player.setStep(12);
-                System.out.println(player.getName() + " move to step " + player.getStep());
-                break;
-            case GOOSE:
-                System.out.println(player.getName() + " step on " + Space.GOOSE.name());
-                System.out.print(player.getName() + " move from " + player.getStep());
-                player.setStep(player.getStep() + dices.stream()                                                // Advance the same amount of steps
-                        .mapToInt(Dice::getResult)
-                        .sum());
-                System.out.println(" to " + player.getStep());
-                this.handleSteps(player);                                                                       // Handle next Step
-                break;
-            case FINISH:
-                System.out.println(player.getName() + " reach the step " + player.getStep());
-                System.out.println(player.getName() + " WINS!");
-                performExit();
-                break;
-            default:
-        }
+    /**
+     * This is just an example of Overloading a method printToConsole
+     * @param newLine parameter that define if new line is created
+     * @param text Array of String to print to console
+     */
+    private void printToConsole(boolean newLine, String... text) {
+        if (newLine)
+            System.out.println(String.join("", text));
+        else
+            System.out.print(String.join("", text));
     }
 
     @Override

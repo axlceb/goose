@@ -1,8 +1,6 @@
 package org.axlceb.goose.gui.cli;
 
-import org.axlceb.goose.CommandExecutor;
 import org.axlceb.goose.shared.Dice;
-import org.axlceb.goose.GooseGame2;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
